@@ -1,6 +1,7 @@
 import * as React from "react";
 import "../overrides.css";
-/* Example prop:
+
+/* Example instance prop:
  *   {
  *       date: Date,
  *       title: "Week 1 Tournament",
@@ -13,89 +14,97 @@ import "../overrides.css";
  * and playerTwo won the second game
  */
 export function ScoreCard(props) {
+  // Get the score for each player
+  let scores = new Array(props.instance.players.length);
+  scores.fill(0);
+  props.instance.results.forEach(r => {
+    scores[r] += 1;
+  });
+
+  const winner = scores.indexOf(2);
+
+  if (winner === -1) throw new Error("there wasn't a winner...");
+
   return (
     <div className="card">
       <header className="card-header">
         <p className="card-header-title is-size-3 has-text-centered is-inline">
-          Week 1
+          {props.instance.title}
         </p>
       </header>
       <div className="card-content">
         <table className="table is-fullwidth">
           <tbody className="no-border">
-            <tr>
+            <tr key={winner}>
               <td align="left">
-                <p className="is-size-3 has-text-weight-bold">Alex</p>
+                <p className="is-size-3 has-text-weight-bold">
+                  {props.instance.players[winner]}
+                </p>
               </td>
               <td align="right">
-                <p className="is-size-3 has-text-weight-bold">(2)</p>
+                <p className="is-size-3 has-text-weight-bold">
+                  ({scores[winner]})
+                </p>
               </td>
             </tr>
-            <tr>
-              <td align="left">
-                <p className="is-size-4">Trevor</p>
-              </td>
-              <td align="right">
-                <p className="is-size-4">(0)</p>
-              </td>
-            </tr>
-            <tr>
-              <td align="left">
-                <p className="is-size-4">Auston</p>
-              </td>
-              <td align="right">
-                <p className="is-size-4">(0)</p>
-              </td>
-            </tr>
+            {props.instance.players.map((p, i) => {
+              if (i === winner) return null;
+
+              return (
+                <tr key={i}>
+                  <td align="left">
+                    <p className="is-size-4">{p}</p>
+                  </td>
+                  <td align="right">
+                    <p className="is-size-4">({scores[i]})</p>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
         <hr />
         <table className="table is-fullwidth">
           <thead>
             <tr>
-              <th />
-              <th align="center">Alex</th>
-              <th align="center">Trevor</th>
-              <th align="center">Auston</th>
+              <th key={-1} />
+              {props.instance.players.map((p, i) => {
+                return (
+                  <th align="center" key={i}>
+                    {p}
+                  </th>
+                );
+              })}
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td align="left">Game 1</td>
-              <td align="center">
-                <span className="icon">
-                  <i className="fas fa-check" />
-                </span>
-              </td>
-              <td align="center">
-                <span className="icon">
-                  <i className="fas fa-minus" />
-                </span>
-              </td>
-              <td align="center">
-                <span className="icon">
-                  <i className="fas fa-minus" />
-                </span>
-              </td>
-            </tr>
-            <tr>
-              <td align="left">Game 2</td>
-              <td align="center">
-                <span className="icon">
-                  <i className="fas fa-check" />
-                </span>
-              </td>
-              <td align="center">
-                <span className="icon">
-                  <i className="fas fa-minus" />
-                </span>
-              </td>
-              <td align="center">
-                <span className="icon">
-                  <i className="fas fa-minus" />
-                </span>
-              </td>
-            </tr>
+            {props.instance.results.map((r, i) => {
+              return (
+                <tr key={i}>
+                  <td align="left" key={-1}>
+                    Game {i + 1}
+                  </td>
+                  {props.instance.players.map((p, j) => {
+                    if (r === j) {
+                      return (
+                        <td align="center" key={j}>
+                          <span className="icon">
+                            <i className="fas fa-check" />
+                          </span>
+                        </td>
+                      );
+                    }
+                    return (
+                      <td align="center" key={j}>
+                        <span className="icon">
+                          <i className="fas fa-minus" />
+                        </span>
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

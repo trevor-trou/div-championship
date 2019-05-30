@@ -3,6 +3,21 @@ import * as ReactDOM from "react-dom";
 import { ScoreCard } from "./components/scoreCard";
 import "./overrides.css";
 
+const results = [
+  {
+    date: new Date("2019-05-24T13:00:00"),
+    title: "Week 2",
+    players: ["Trevor", "Alex", "Auston"],
+    results: [0, 1, 2, 1]
+  },
+  {
+    date: new Date("2019-05-24T13:00:00"),
+    title: "Week 1",
+    players: ["Trevor", "Alex", "Auston"],
+    results: [1, 1]
+  }
+];
+
 class DivMainPage extends React.Component {
   constructor(props) {
     super(props);
@@ -20,12 +35,18 @@ class DivMainPage extends React.Component {
             </div>
           </div>
         </section>
-        <div className="container flex full-height">
-          <div className="columns">
-            <div className="column is-half">
-              <ScoreCard />
-            </div>
-          </div>
+        <div className="container flex">
+          {results.map(r => {
+            return (
+              <div className="columns">
+                <div className="column" />
+                <div className="column is-half">
+                  <ScoreCard instance={r} />
+                </div>
+                <div className="column" />
+              </div>
+            );
+          })}
         </div>
       </>
     );
