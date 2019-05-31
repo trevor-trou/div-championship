@@ -4,14 +4,14 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
-  mode: "development",
-  entry: "./src/app.jsx",
+  mode: "production",
+  entry: {
+    main: "./src/app.jsx"
+  },
   output: {
-    path: path.resolve(__dirname, "dist"),
+    path: path.resolve(__dirname, "dist_prod"),
     filename: "js/[name].bundle.js"
   },
-  devtool: "source-map",
-  watch: true,
   resolve: {
     extensions: [".js", ".jsx", ".json"]
   },
@@ -37,6 +37,9 @@ module.exports = {
         to: "./css/bulma.min.css"
       }
     ]),
+    new webpack.DefinePlugin({
+      "process.env.NODE_ENV": JSON.stringify("production")
+    }),
     new webpack.DefinePlugin({
       API_BASE_URL: JSON.stringify("https://div-api.trouchon.com")
     })
