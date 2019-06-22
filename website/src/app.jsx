@@ -95,7 +95,7 @@ class DivMainPage extends React.Component {
         <section className="hero">
           <div className="hero-body">
             <div className="container has-text-centered">
-              <h1 className="title is-1 is-family-code">
+              <h1 className="title is-size-2-mobile is-size-1-tablet is-family-code">
                 &lt;div&gt; Championship Series &lt;/div&gt;
               </h1>
             </div>

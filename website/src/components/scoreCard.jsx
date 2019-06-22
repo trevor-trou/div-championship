@@ -15,15 +15,28 @@ import "../overrides.css";
  */
 export function ScoreCard(props) {
   // Get the score for each player
-  let scores = new Array(props.instance.players.length);
-  scores.fill(0);
-  props.instance.results.forEach(r => {
-    scores[r] += 1;
+  let scores = props.instance.players.map(player => {
+    return {
+      score: 0,
+      player
+    };
   });
 
-  const winner = scores.indexOf(2);
+  props.instance.results.forEach(r => {
+    scores[r].score += 1;
+  });
 
-  if (winner === -1) throw new Error("there wasn't a winner...");
+  scores.sort((a, b) => {
+    if (a.score > b.score) {
+      return -1;
+    }
+
+    if (a.score < b.score) {
+      return 1;
+    }
+
+    return 0;
+  });
 
   return (
     <div className="card">
@@ -35,28 +48,31 @@ export function ScoreCard(props) {
       <div className="card-content">
         <table className="table is-fullwidth">
           <tbody className="no-border">
-            <tr key={winner}>
-              <td align="left">
-                <p className="is-size-3 has-text-weight-bold">
-                  {props.instance.players[winner]}
-                </p>
-              </td>
-              <td align="right">
-                <p className="is-size-3 has-text-weight-bold">
-                  ({scores[winner]})
-                </p>
-              </td>
-            </tr>
-            {props.instance.players.map((p, i) => {
-              if (i === winner) return null;
+            {scores.map((score, i) => {
+              if (i === 0) {
+                return (
+                  <tr key={i}>
+                    <td align="left">
+                      <p className="is-size-3 has-text-weight-bold">
+                        {score.player}
+                      </p>
+                    </td>
+                    <td align="right">
+                      <p className="is-size-3 has-text-weight-bold">
+                        ({score.score})
+                      </p>
+                    </td>
+                  </tr>
+                );
+              }
 
               return (
                 <tr key={i}>
                   <td align="left">
-                    <p className="is-size-4">{p}</p>
+                    <p className="is-size-4">{score.player}</p>
                   </td>
                   <td align="right">
-                    <p className="is-size-4">({scores[i]})</p>
+                    <p className="is-size-4">({score.score})</p>
                   </td>
                 </tr>
               );
