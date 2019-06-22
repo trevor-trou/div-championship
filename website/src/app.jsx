@@ -1,6 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { ScoreCard } from "./components/scoreCard";
+import { Modal } from "./components/modal";
 import "./overrides.css";
 
 const results = [
@@ -24,10 +25,12 @@ class DivMainPage extends React.Component {
 
     this.state = {
       tournaments: null,
-      alert: null
+      alert: null,
+      modalOpen: false
     };
 
     this.getBody = this.getBody.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
   }
 
   componentDidMount() {
@@ -89,6 +92,14 @@ class DivMainPage extends React.Component {
     }
   }
 
+  toggleModal() {
+    this.setState(prev => {
+      return {
+        modalOpen: !prev.modalOpen
+      };
+    });
+  }
+
   render() {
     return (
       <>
@@ -102,6 +113,13 @@ class DivMainPage extends React.Component {
           </div>
         </section>
         <div className="container flex">{this.getBody()}</div>
+        <a
+          className="button is-rounded floating is-medium"
+          onClick={this.toggleModal}
+        >
+          Rules
+        </a>
+        <Modal toggle={this.toggleModal} active={this.state.modalOpen}/>
       </>
     );
   }
