@@ -8,7 +8,7 @@ module.exports = {
   entry: "./src/app.jsx",
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: "js/[name].bundle.js"
+    filename: "js/[name].[contenthash].js"
   },
   devtool: "source-map",
   watch: true,
