@@ -80,49 +80,51 @@ export function ScoreCard(props) {
           </tbody>
         </table>
         <hr />
-        <table className="table is-fullwidth">
-          <thead>
-            <tr>
-              <th key={-1} />
-              {props.instance.players.map((p, i) => {
+        <div className="overflow">
+          <table className="table is-fullwidth">
+            <thead>
+              <tr>
+                <th key={-1} />
+                {props.instance.players.map((p, i) => {
+                  return (
+                    <th align="center" key={i}>
+                      {p}
+                    </th>
+                  );
+                })}
+              </tr>
+            </thead>
+            <tbody>
+              {props.instance.results.map((r, i) => {
                 return (
-                  <th align="center" key={i}>
-                    {p}
-                  </th>
-                );
-              })}
-            </tr>
-          </thead>
-          <tbody>
-            {props.instance.results.map((r, i) => {
-              return (
-                <tr key={i}>
-                  <td align="left" key={-1}>
-                    Game {i + 1}
-                  </td>
-                  {props.instance.players.map((p, j) => {
-                    if (r === j) {
+                  <tr key={i}>
+                    <td align="left" style={{whiteSpace:"nowrap"}} key={-1}>
+                      Game {i + 1}
+                    </td>
+                    {props.instance.players.map((p, j) => {
+                      if (r === j) {
+                        return (
+                          <td align="center" key={j}>
+                            <span className="icon">
+                              <i className="fas fa-check" />
+                            </span>
+                          </td>
+                        );
+                      }
                       return (
                         <td align="center" key={j}>
                           <span className="icon">
-                            <i className="fas fa-check" />
+                            <i className="fas fa-minus" />
                           </span>
                         </td>
                       );
-                    }
-                    return (
-                      <td align="center" key={j}>
-                        <span className="icon">
-                          <i className="fas fa-minus" />
-                        </span>
-                      </td>
-                    );
-                  })}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+                    })}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

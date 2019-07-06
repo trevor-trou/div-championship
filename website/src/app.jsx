@@ -80,9 +80,9 @@ class DivMainPage extends React.Component {
     } else {
       return this.state.tournaments.map((r, i) => {
         return (
-          <div className="columns" key={i}>
+          <div className="columns" key={i} style={{marginRight: 0}}>
             <div className="column" />
-            <div className="column is-half">
+            <div className="column is-half" style={{paddingRight: 0}}>
               <ScoreCard instance={r} />
             </div>
             <div className="column" />

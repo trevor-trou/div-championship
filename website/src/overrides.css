@@ -14,3 +14,7 @@
     left: auto;
     position: fixed;
 }
+
+.overflow {
+    overflow-x:auto;
+}
