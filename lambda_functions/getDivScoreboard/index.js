@@ -30,8 +30,7 @@ async function recentTournaments() {
       },
       ExpressionAttributeNames: {
         "#t": "eventType"
-      },
-      Limit: 10
+      }
     };
 
     docClient.query(params, (err, data) => {
