@@ -13,13 +13,14 @@ const table = "div";
 
 exports.handler = async function(event, context, callback) {
   try {
-    const currentSeason = await getActiveSeason();
-    
+    const activeSeasons = await getActiveSeasons();
+
     let tournaments = [];
-    if(currentSeason) {
-      tournaments = await recentTournaments(currentSeason);
+    for (let i = 0; i < activeSeasons.length; i++) {
+      const seasonResults = await recentTournaments(activeSeasons[i]);
+      tournaments = tournaments.concat(seasonResults);
     }
-    
+
     callback(null, tournaments);
   } catch (ex) {
     console.log(JSON.stringify(ex));
@@ -27,31 +28,25 @@ exports.handler = async function(event, context, callback) {
   }
 };
 
-async function getActiveSeason() {
+async function getActiveSeasons() {
   return new Promise((resolve, reject) => {
     const params = {
       TableName: seasonsTable,
       FilterExpression: "#active = :val",
       ExpressionAttributeNames: {
-        "#active": "active",
-        "#name": "name"
+        "#active": "active"
       },
       ExpressionAttributeValues: {
         ":val": true
       },
-      ProjectionExpression: "#name"
     };
-    
+
     docClient.scan(params, (err, data) => {
       if (err) {
         reject(err);
       } else {
-        if(data.Items.length > 0) {
-          resolve(data.Items[0].name);
-        }
-        else {
-          resolve(null);
-        }
+        data.Items.sort(sortSeasons);
+        resolve(data.Items.map(s => s.name));
       }
     });
   });
@@ -79,4 +74,16 @@ async function recentTournaments(season) {
       }
     });
   });
+}
+
+function sortSeasons(a, b) {
+  if(a.startDate > b.startDate) {
+    return -1;
+  }
+
+  if(a.startDate < b.startDate) {
+    return 1;
+  }
+
+  return 0;
 }

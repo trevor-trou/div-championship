@@ -2,7 +2,7 @@ import * as React from "react";
 import { ScoreCard } from "./scoreCard";
 import { SeasonSummaryCard } from "./seasonSummaryCard";
 
-export function PreviousSeasons(props) {
+export function SeasonSummaries(props) {
   //  If still fetching (props.seasonSummaries === null), show a loader
   // else, show the tournaments.
   if (!props.seasonSummaries) {

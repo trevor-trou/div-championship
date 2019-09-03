@@ -4,13 +4,13 @@ import { Modal } from "./components/modal";
 import "./overrides.css";
 import { Navigation } from "./components/navigation";
 import { CurrentSeason } from "./components/currentSeason";
-import { PreviousSeasons } from "./components/previousSeasons";
+import { SeasonSummaries } from "./components/seasonSummaries";
 
 class DivMainPage extends React.Component {
   constructor(props) {
     super(props);
 
-    // page 0 = current season, page 1 = previous seasons
+    // page 0 = current season, page 1 = season summaries
     this.state = {
       tournaments: null,
       seasonSummaries: null,
@@ -74,7 +74,7 @@ class DivMainPage extends React.Component {
       case 0:
         return <CurrentSeason tournaments={this.state.tournaments} />;
       case 1:
-        return <PreviousSeasons seasonSummaries={this.state.seasonSummaries} />;
+        return <SeasonSummaries seasonSummaries={this.state.seasonSummaries} />;
     }
   }
 
