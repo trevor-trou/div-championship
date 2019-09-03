@@ -1,35 +1,26 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { ScoreCard } from "./components/scoreCard";
 import { Modal } from "./components/modal";
 import "./overrides.css";
-
-const results = [
-  {
-    date: new Date("2019-05-24T13:00:00"),
-    title: "Week 2",
-    players: ["Trevor", "Alex", "Auston"],
-    results: [0, 1, 2, 1]
-  },
-  {
-    date: new Date("2019-05-24T13:00:00"),
-    title: "Week 1",
-    players: ["Trevor", "Alex", "Auston"],
-    results: [1, 1]
-  }
-];
+import { Navigation } from "./components/navigation";
+import { CurrentSeason } from "./components/currentSeason";
+import { PreviousSeasons } from "./components/previousSeasons";
 
 class DivMainPage extends React.Component {
   constructor(props) {
     super(props);
 
+    // page 0 = current season, page 1 = previous seasons
     this.state = {
       tournaments: null,
+      seasonSummaries: null,
       alert: null,
+      selectedPage: 0,
       modalOpen: false
     };
 
     this.getBody = this.getBody.bind(this);
+    this.setPage = this.setPage.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
   }
 
@@ -46,6 +37,20 @@ class DivMainPage extends React.Component {
       })
       .then(json => {
         this.setState({ tournaments: json });
+      });
+
+    fetch(`${API_BASE_URL}/getSeasonSummaries`)
+      .then(response => {
+        return response.json();
+      })
+      .catch(err => {
+        console.error(err);
+        this.setState({
+          alert: "Unable to load... Please try again later."
+        });
+      })
+      .then(json => {
+        this.setState({ seasonSummaries: json });
       });
   }
 
@@ -65,30 +70,11 @@ class DivMainPage extends React.Component {
       );
     }
 
-    // If still fetching (this.state.tournaments === null), show a loader
-    // else, show the tournaments.
-    if (!this.state.tournaments) {
-      return (
-        <div className="columns">
-          <div className="column" />
-          <div className="column is-one-third">
-            <progress className="progress is-primary" />
-          </div>
-          <div className="column" />
-        </div>
-      );
-    } else {
-      return this.state.tournaments.map((r, i) => {
-        return (
-          <div className="columns" key={i} style={{marginRight: 0}}>
-            <div className="column" />
-            <div className="column is-half" style={{paddingRight: 0}}>
-              <ScoreCard instance={r} />
-            </div>
-            <div className="column" />
-          </div>
-        );
-      });
+    switch (this.state.selectedPage) {
+      case 0:
+        return <CurrentSeason tournaments={this.state.tournaments} />;
+      case 1:
+        return <PreviousSeasons seasonSummaries={this.state.seasonSummaries} />;
     }
   }
 
@@ -98,6 +84,14 @@ class DivMainPage extends React.Component {
         modalOpen: !prev.modalOpen
       };
     });
+  }
+
+  setPage(pageNumber) {
+    if (this.state.selectedPage !== pageNumber) {
+      this.setState({
+        selectedPage: pageNumber
+      });
+    }
   }
 
   render() {
@@ -112,6 +106,9 @@ class DivMainPage extends React.Component {
             </div>
           </div>
         </section>
+        <section style={{ paddingBottom: "48px" }}>
+          <Navigation page={this.state.selectedPage} setPage={this.setPage} />
+        </section>
         <div className="container flex">{this.getBody()}</div>
         <a
           className="button is-rounded floating is-medium"
@@ -119,7 +116,7 @@ class DivMainPage extends React.Component {
         >
           Rules
         </a>
-        <Modal toggle={this.toggleModal} active={this.state.modalOpen}/>
+        <Modal toggle={this.toggleModal} active={this.state.modalOpen} />
       </>
     );
   }
