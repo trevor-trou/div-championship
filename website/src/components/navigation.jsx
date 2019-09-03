@@ -19,7 +19,7 @@ export function Navigation(props) {
               props.setPage(1);
             }}
           >
-            <span>Previous Seasons</span>
+            <span>Season Summaries</span>
           </a>
         </li>
       </ul>
