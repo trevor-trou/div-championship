@@ -1,0 +1,16 @@
+{
+  "name": "lambda_functions",
+  "version": "1.0.0",
+  "description": "",
+  "main": "runner.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./runner.js"
+  },
+  "author": "Trevor Trouchon",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.521.0",
+    "dotenv": "^8.1.0"
+  }
+}

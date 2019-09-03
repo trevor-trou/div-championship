@@ -1,3 +1,4 @@
 **/node_modules/
 website/dist/*
 website/dist_prod/*
+.vscode/*
